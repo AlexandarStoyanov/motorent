@@ -88,10 +88,15 @@
                  data-cc="{{ m.engine_cc }}"
                  data-status="{{ m.status }}"
                  data-category="">
-          <div class="card__img card__img--rent">
-            <img src="{% static 'images/bike-placeholder.jpg' %}" alt="{{ m.brand }} {{ m.model }}">
-            <span class="pillbadge">{{ m.status|title }}</span>
-          </div>
+            <div class="card__img card__img--rent">
+              {% if m.image %}
+                <img src="{{ m.image.url }}" alt="{{ m.brand }} {{ m.model }}">
+              {% else %}
+                <img src="{% static 'images/bike-placeholder.jpg' %}" alt="{{ m.brand }} {{ m.model }}">
+              {% endif %}
+
+              <span class="pillbadge">{{ m.status|title }}</span>
+            </div>
 
           <div class="card__body">
             <div class="card__row">
