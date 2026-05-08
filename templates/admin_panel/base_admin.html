@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Admin Panel{% endblock %}</title>
+
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="admin-shell">
+    <div class="admin-layout">
+
+      <aside class="admin-sidebar">
+        <div class="admin-brand">
+          <h2>Admin Panel</h2>
+          <p>MotoRent Bulgaria</p>
+        </div>
+
+        <div class="admin-section">
+          <div class="admin-section-title">Management</div>
+
+          <a href="{% url 'admin_dashboard' %}"
+             class="admin-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+            <i class="fas fa-border-all"></i>
+            <span>Dashboard</span>
+          </a>
+
+          <a href="{% url 'admin_motorcycles' %}"
+             class="admin-link {% if request.resolver_match.url_name == 'admin_motorcycles' %}active{% endif %}">
+            <i class="fas fa-motorcycle"></i>
+            <span>Motorcycles</span>
+          </a>
+
+          <a href="{% url 'admin_accessories' %}"
+             class="admin-link {% if request.resolver_match.url_name == 'admin_accessories' %}active{% endif %}">
+              <i class="fas fa-cube"></i>
+              <span>Accessories</span>
+          </a>
+
+          <a href="{% url 'admin_bookings' %}"
+               class="admin-link {% if request.resolver_match.url_name == 'admin_bookings' %}active{% endif %}">
+              <i class="fas fa-calendar-alt"></i>
+              <span>Bookings</span>
+          </a>
+
+          <a href="{% url 'admin_users' %}"
+               class="admin-link {% if request.resolver_match.url_name == 'admin_users' %}active{% endif %}">
+              <i class="fas fa-users"></i>
+              <span>Users</span>
+          </a>
+
+          <a href="{% url 'admin_discount_codes' %}"
+               class="admin-link {% if request.resolver_match.url_name == 'admin_discount_codes' %}active{% endif %}">
+              <i class="fas fa-ticket"></i>
+              <span>Discount Codes</span>
+          </a>
+
+          <a href="{% url 'admin_reviews' %}"
+               class="admin-link {% if request.resolver_match.url_name == 'admin_reviews' %}active{% endif %}">
+              <i class="fas fa-star"></i>
+              <span>Reviews</span>
+          </a>
+
+        <div class="admin-section">
+          <div class="admin-section-title">Navigation</div>
+          <a href="{% url 'home' %}" class="admin-link">
+            <i class="fas fa-home"></i>
+            <span>Back to Site</span>
+          </a>
+        </div>
+      </aside>
+
+      <main class="admin-main">
+        <div class="admin-topbar">
+          <div class="admin-topbar-left">
+              <h1>{% block page_title %}Admin Dashboard{% endblock %}</h1>
+          </div>
+
+          <div class="admin-user-badge">
+            {{ request.user.username|first|upper }}
+          </div>
+        </div>
+
+        {% if messages %}
+          <div class="admin-messages">
+            {% for message in messages %}
+              <div class="admin-message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="admin-content">
+          {% block content %}{% endblock %}
+        </div>
+      </main>
+
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+{% extends "admin_panel/base_admin.html" %}
+
+{% block title %}Reviews Management{% endblock %}
+{% block page_title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-panel">
+  <div class="discount-header">
+    <div>
+      <h2 class="admin-page-title admin-page-title--small">Reviews Management</h2>
+      <p class="admin-page-subtitle">Moderate and manage customer reviews</p>
+    </div>
+
+    <button type="button" class="admin-btn admin-btn--primary" onclick="toggleReviewForm()">
+      <i class="fas fa-plus"></i>
+      Add Review
+    </button>
+  </div>
+
+  <div id="reviewForm" class="discount-form hidden">
+    <form method="post" action="{% url 'admin_add_review' %}" class="discount-form-grid">
+      {% csrf_token %}
+
+      <div class="admin-field">
+        <label>Customer Name</label>
+        <input type="text" name="customer_name" class="admin-input" required>
+      </div>
+
+      <div class="admin-field">
+        <label>Motorcycle</label>
+        <select name="motorcycle" class="admin-input" required>
+          {% for motorcycle in motorcycles %}
+            <option value="{{ motorcycle.id }}">
+              {{ motorcycle.brand }} {{ motorcycle.model }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="admin-field">
+        <label>Rating</label>
+        <select name="rating" class="admin-input">
+          <option value="5">5 stars</option>
+          <option value="4">4 stars</option>
+          <option value="3">3 stars</option>
+          <option value="2">2 stars</option>
+          <option value="1">1 star</option>
+        </select>
+      </div>
+
+      <div class="admin-field admin-field--full">
+        <label>Comment</label>
+        <textarea name="comment" class="admin-textarea" required></textarea>
+      </div>
+
+      <div class="discount-form-actions">
+        <button type="button" class="admin-btn admin-btn--ghost" onclick="toggleReviewForm()">Cancel</button>
+        <button type="submit" class="admin-btn admin-btn--primary">Add Review</button>
+      </div>
+    </form>
+  </div>
+
+  {% if reviews %}
+    <div class="discount-list">
+      {% for review in reviews %}
+        <div class="discount-card">
+          <div>
+            <h3>{{ review.customer_name }}</h3>
+            <p><strong>Motorcycle:</strong> {{ review.motorcycle.brand }} {{ review.motorcycle.model }}</p>
+            <p><strong>Rating:</strong> {{ review.rating }}/5</p>
+            <p>{{ review.comment }}</p>
+          </div>
+
+          <div class="discount-right">
+            <form method="post" action="{% url 'admin_delete_review' review.pk %}"
+                  onsubmit="return confirm('Delete this review?');">
+              {% csrf_token %}
+              <button type="submit" class="admin-btn admin-btn--danger admin-btn--sm">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="discount-empty">
+      <p>No reviews yet</p>
+      <button type="button" class="admin-btn admin-btn--primary" onclick="toggleReviewForm()">
+        <i class="fas fa-plus"></i>
+        Add Review
+      </button>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  function toggleReviewForm() {
+    document.getElementById("reviewForm").classList.toggle("hidden");
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}MotoRent | Наеми мотоциклет{% endblock %}
+
+{% block content %}
+
+<section class="rent-hero">
+  <div class="container rent-hero__inner">
+    <h1 class="rent-hero__title">Rent a Motorcycle</h1>
+    <p class="rent-hero__subtitle">
+      Choose from our premium fleet of motorcycles. All bikes are well-maintained and ready for your next adventure.
+    </p>
+    <div class="rent-hero__meta">
+      <span class="dot">📍</span> Based in Bulgaria - Explore the Balkans
+    </div>
+  </div>
+</section>
+
+<section class="rent">
+  <div class="container rent__layout">
+
+    <!-- Filters (left) -->
+    <aside class="rent__filters">
+      <div class="filters filters--side">
+        <div class="filters__header">
+          <div class="filters__title">Filters</div>
+          <div class="filters__actions">
+            <button class="iconx" type="button" title="Clear" onclick="resetFilters()">×</button>
+            <button class="linkbtn" type="button" onclick="resetFilters()">Reset</button>
+          </div>
+        </div>
+
+        <div class="filters__grid filters__grid--stack">
+          <label class="field">
+            <span class="field__label">Search</span>
+            <input id="q" class="input" placeholder="Search..." oninput="applyFilters()">
+          </label>
+
+          <label class="field">
+            <span class="field__label">Category</span>
+            <select id="cat" class="select" onchange="applyFilters()">
+              <option value="">All Categories</option>
+              <option value="sport">Sport</option>
+              <option value="cruiser">Cruiser</option>
+              <option value="scooter">Scooter</option>
+              <option value="touring">Touring</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Price Range</span>
+            <div class="range">
+              <input id="priceMax" type="range" min="0" max="500" value="500" oninput="updatePrice(); applyFilters()">
+              <div class="range__row">
+                <span class="muted">€0</span>
+                <span class="muted">€0 - €<span id="priceMaxLabel">500</span>/day</span>
+              </div>
+            </div>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Sort By</span>
+            <select id="sort" class="select" onchange="applySort()">
+              <option value="name">Name (A-Z)</option>
+              <option value="price_asc">Price (Low-High)</option>
+              <option value="price_desc">Price (High-Low)</option>
+              <option value="cc_desc">Engine CC (High-Low)</option>
+            </select>
+          </label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- List (right) -->
+    <main class="rent__content">
+      <div class="rent__toprow">
+        <div class="muted">
+          Showing <span id="count">0</span> motorcycles
+        </div>
+      </div>
+
+      <div id="grid" class="grid grid--rent">
+        {% for m in motorcycles %}
+        <article class="card card--rent"
+                 data-name="{{ m.brand }} {{ m.model }}"
+                 data-price="{{ m.price_per_day }}"
+                 data-cc="{{ m.engine_cc }}"
+                 data-status="{{ m.status }}"
+                 data-category="">
+          <div class="card__img card__img--rent">
+            <img src="{% static 'images/bike-placeholder.jpg' %}" alt="{{ m.brand }} {{ m.model }}">
+            <span class="pillbadge">{{ m.status|title }}</span>
+          </div>
+
+          <div class="card__body">
+            <div class="card__row">
+              <h3 class="card__title">{{ m.brand }} {{ m.model }}</h3>
+              <span class="tag">Sport</span>
+            </div>
+
+            <p class="card__desc">
+              {{ m.engine_cc }}cc • Smooth ride, premium condition and ready for booking.
+            </p>
+
+            <div class="card__bottom">
+              <div class="price">
+                <div class="price__value">€{{ m.price_per_day }}<span class="price__unit">/day</span></div>
+              </div>
+
+              <button class="btn btn--primary" type="button"
+                      onclick="openBookingModal({{ m.id }}, '{{ m.brand|escapejs }} {{ m.model|escapejs }}', '{{ m.price_per_day }}')">
+                Book Now
+              </button>
+            </div>
+          </div>
+        </article>
+        {% empty %}
+          <p class="muted">Няма мотори. Добави от <a href="/admin/">Admin</a>.</p>
+        {% endfor %}
+      </div>
+    </main>
+
+  </div>
+
+  <!-- MODAL (hidden by default) -->
+  <div id="modalBackdrop" class="modal-backdrop hidden">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+
+      <div class="modal__head">
+        <h2 id="modalTitle" class="modal__title">Book</h2>
+        <button class="modal__close" type="button" onclick="closeBookingModal()">×</button>
+      </div>
+
+      <div class="modal__body">
+        <form id="bookingForm" method="POST">
+            {% csrf_token %}
+          <input type="hidden" id="motorcycleId">
+
+          <div class="form-grid">
+            <label class="field">
+              <span class="field__label">Full Name</span>
+              <input id="fullName" class="input" placeholder="John Doe" required>
+            </label>
+
+            <label class="field">
+              <span class="field__label">Email</span>
+              <input id="email" class="input" type="email" placeholder="john@example.com" required>
+            </label>
+
+            <label class="field field--wide">
+              <span class="field__label">Phone Number</span>
+              <input id="phone" class="input" placeholder="+359 888 123 456">
+            </label>
+
+            <label class="field">
+              <span class="field__label">Start Date</span>
+              <input id="startDate" class="input" type="date" required>
+            </label>
+
+            <label class="field">
+              <span class="field__label">End Date</span>
+              <input id="endDate" class="input" type="date" required>
+            </label>
+          </div>
+
+          <div class="modal__section">
+            <h3 class="modal__sectionTitle">Add Accessories (Optional)</h3>
+
+            <div class="acc-list">
+              {% for acc in accessories %}
+                <div class="acc-item">
+
+                  <div>
+                    <div class="acc-name">
+                      {{ acc.name }}
+                      <span class="acc-tag">{{ acc.category }}</span>
+                    </div>
+
+                    <div class="acc-price">€{{ acc.price_per_day }}/day</div>
+                  </div>
+
+                  <button type="button"
+                          class="acc-btn"
+                          data-id="{{ acc.id }}"
+                          data-price="{{ acc.price_per_day }}"
+                          onclick="toggleAcc(this)">
+                    +
+                  </button>
+
+                </div>
+              {% empty %}
+                <p class="muted">No accessories available</p>
+              {% endfor %}
+            </div>
+
+          <div id="formMsg" class="form-msg hidden"></div>
+
+          <button id="confirmBtn" class="btn btn--primary btn--full btn--xl" type="submit">
+            Confirm Booking
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+<footer class="footer footer--light">
+  <div class="container footer__grid">
+    <div>
+      <div class="footer__brand">MotoRent</div>
+      <p class="footer__text">
+        Premium motorcycles for rent in Bulgaria. Easy booking, fair prices, and bikes ready for your next adventure.
+      </p>
+
+      <div class="footer__icons">
+        <a class="soc" href="#" aria-label="Facebook">f</a>
+        <a class="soc" href="#" aria-label="Instagram">◎</a>
+        <a class="soc" href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer__heading">Quick Links</div>
+      <a class="footer__link" href="{% url 'rent' %}">Rent</a>
+      <a class="footer__link" href="#">Tours</a>
+      <a class="footer__link" href="#">Accessories</a>
+    </div>
+
+    <div>
+      <div class="footer__heading">Contact</div>
+      <div class="footer__row">📍 Sofia, Bulgaria</div>
+      <div class="footer__row">☎ +359 888 123 456</div>
+      <div class="footer__row">✉ motorent@example.com</div>
+      <div class="footer__row">🕒 Mon–Sun: 09:00–19:00</div>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    © {% now "Y" %} MotoRent. All rights reserved.
+  </div>
+</footer>
+
+<script src="{% static 'js/rent.js' %}"></script>
+{% endblock %}

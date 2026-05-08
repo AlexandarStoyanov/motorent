@@ -1,0 +1,119 @@
+{% load static %}
+{% load i18n %}
+
+{% get_current_language as CURRENT_LANGUAGE %}
+{% get_available_languages as LANGUAGES %}
+{% get_language_info_list for LANGUAGES as languages %}
+
+<!doctype html>
+<html lang="{{ CURRENT_LANGUAGE }}">
+<head>
+  <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}MotoRent{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="container topbar__inner">
+    <div class="brand">
+      <span class="brand__logo">MotoRent</span>
+    </div>
+
+    <nav class="nav">
+      <a class="nav__item {% if request.resolver_match.url_name == 'home' %}nav__item--active{% endif %}"
+         href="{% url 'home' %}">
+        {% trans "Home" %}
+      </a>
+
+      <a class="nav__item {% if request.resolver_match.url_name == 'rent' %}nav__item--active{% endif %}"
+         href="{% url 'rent' %}">
+        {% trans "Rent a motorcycle" %}
+      </a>
+
+      <a class="nav__item {% if request.resolver_match.url_name == 'tours' %}nav__item--active{% endif %}"
+         href="{% url 'tours' %}">
+        {% trans "Tours" %}
+      </a>
+
+      <a class="nav__item {% if request.resolver_match.url_name == 'accessories' %}nav__item--active{% endif %}"
+         href="{% url 'accessories' %}">
+        {% trans "Accessories" %}
+      </a>
+    </nav>
+
+    <div class="topbar__right">
+
+      {# ===== Language switcher ===== #}
+      <form action="{% url 'set_language' %}" method="post" style="margin:0;">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}"/>
+
+        <div class="pill">
+          <span class="pill__label">{{ CURRENT_LANGUAGE|upper }}</span>
+
+          <select name="language"
+                  onchange="this.form.submit()"
+                  style="border:none; background:transparent; outline:none; cursor:pointer; font-weight:700;">
+            {% for lang in languages %}
+              <option value="{{ lang.code }}" {% if lang.code == CURRENT_LANGUAGE %}selected{% endif %}>
+                {{ lang.name_local }}
+              </option>
+            {% endfor %}
+          </select>
+
+          <span class="pill__chev">▾</span>
+        </div>
+      </form>
+        <button class="iconbtn" title="{% trans 'Cart' %}">
+            <i class="fas fa-shopping-cart"></i>
+        </button>
+
+        {% if user.is_authenticated %}
+<div class="profile-menu">
+
+    <!-- Avatar -->
+    <div class="profile-trigger" onclick="toggleMenu()">
+    {{ user.username|first|upper }}
+    </div>
+
+    <!-- Dropdown -->
+    <div class="profile-dropdown" id="profileDropdown">
+
+        <a href="{% url 'profile' %}" class="dropdown-item">
+            <i class="fas fa-user"></i> My Profile
+        </a>
+
+        <a href="{% url 'my_bookings' %}" class="dropdown-item">
+          <i class="fas fa-calendar"></i> My Bookings
+        </a>
+
+        {% if user.is_staff or user.is_superuser %}
+        <a href="{% url 'admin_dashboard' %}" class="dropdown-item admin">
+            <i class="fas fa-shield-alt"></i> Admin Dashboard
+        </a>
+        {% endif %}
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="dropdown-item logout">
+                <i class="fas fa-sign-out-alt"></i> Sign Out
+            </button>
+        </form>
+    </div>
+</div>
+        {% else %}
+        <a href="{% url 'login' %}" class="btn btn--primary">Login</a>
+        {% endif %}
+  </div>
+</header>
+
+{% block content %}{% endblock %}
+<script src="{% static 'js/navbar.js' %}"></script>
+</body>
+</html>

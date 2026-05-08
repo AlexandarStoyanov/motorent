@@ -1,0 +1,70 @@
+{% load static %}
+{% load i18n %}
+
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <title>My Profile | MotoRent</title>
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+<body>
+
+{% include "base.html" %}
+
+<main class="profile-page">
+  <section class="profile-card">
+    <h1>My Profile</h1>
+    <p class="profile-subtitle">Manage your account information</p>
+
+    <div class="profile-header">
+      <div class="profile-avatar">
+        {{ request.user.username|first|upper }}{% if request.user.last_name %}{{ request.user.last_name|first|upper }}{% endif %}
+      </div>
+
+      <div>
+        <h3>{{ request.user.username }}</h3>
+        <p>{{ request.user.email|default:"No email added" }}</p>
+      </div>
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="profile-field">
+        <label>Full Name</label>
+        <input
+          type="text"
+          name="full_name"
+          value="{{ request.user.first_name }} {{ request.user.last_name }}"
+        >
+      </div>
+
+      <div class="profile-field">
+        <label>Email</label>
+        <input
+          type="email"
+          value="{{ request.user.email }}"
+          disabled
+        >
+        <small>Email cannot be changed</small>
+      </div>
+
+      <div class="profile-field">
+        <label>Phone Number</label>
+        <input
+          type="text"
+          name="phone_number"
+          value="{{ profile.phone_number }}"
+          placeholder="+359 888 123 456"
+        >
+      </div>
+
+      <button type="submit" class="profile-btn">Save Changes</button>
+    </form>
+  </section>
+</main>
+
+</body>
+</html>

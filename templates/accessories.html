@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}MotoRent | Accessories{% endblock %}
+
+{% block content %}
+
+<section class="rent-hero">
+  <div class="container rent-hero__inner">
+    <h1 class="rent-hero__title">Accessories</h1>
+    <p class="rent-hero__subtitle">
+      Choose from our premium accessories. Enhance your ride with quality gear.
+    </p>
+    <div class="rent-hero__meta">
+      <span class="dot">🧰</span> Everything you need for a better ride
+    </div>
+  </div>
+</section>
+
+<section class="rent">
+  <div class="container rent__layout">
+
+    <!-- FILTERS -->
+    <aside class="rent__filters">
+      <div class="filters filters--side">
+
+        <div class="filters__header">
+          <div class="filters__title">Filters</div>
+          <div class="filters__actions">
+            <button class="iconx" type="button" onclick="resetFilters()">×</button>
+            <button class="linkbtn" type="button" onclick="resetFilters()">Reset</button>
+          </div>
+        </div>
+
+        <div class="filters__grid filters__grid--stack">
+
+          <label class="field">
+            <span class="field__label">Search</span>
+            <input id="q" class="input" placeholder="Search..." oninput="applyFilters()">
+          </label>
+
+          <label class="field">
+            <span class="field__label">Category</span>
+            <select id="cat" class="select" onchange="applyFilters()">
+              <option value="">All Categories</option>
+              <option value="helmets">Helmets</option>
+              <option value="gloves">Gloves</option>
+              <option value="gear">Gear</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Price Range</span>
+            <div class="range">
+              <input id="priceMax" type="range" min="0" max="100" value="100"
+                     oninput="updatePrice(); applyFilters()">
+              <div class="range__row">
+                <span class="muted">€0</span>
+                <span class="muted">€0 - €<span id="priceMaxLabel">100</span>/day</span>
+              </div>
+            </div>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Sort By</span>
+            <select id="sort" class="select" onchange="applySort()">
+              <option value="name">Name (A-Z)</option>
+              <option value="price_asc">Price (Low-High)</option>
+              <option value="price_desc">Price (High-Low)</option>
+            </select>
+          </label>
+
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="rent__content">
+
+      <div class="rent__toprow">
+        <div class="muted">
+          Showing <span id="count">0</span> accessories
+        </div>
+      </div>
+
+      <div id="grid" class="grid grid--rent">
+
+        {% for acc in accessories %}
+        <article class="card card--rent"
+                 data-name="{{ acc.name }}"
+                 data-price="{{ acc.price_per_day }}"
+                 data-category="{{ acc.category|default:'' }}">
+
+          <div class="card__img card__img--rent">
+            {% if acc.image %}
+              <img src="{{ acc.image.url }}">
+            {% else %}
+              <img src="{% static 'images/bike-placeholder.jpg' %}">
+            {% endif %}
+
+            {% if acc.in_stock %}
+              <span class="pillbadge">In Stock</span>
+            {% else %}
+              <span class="pillbadge" style="background: rgba(239,68,68,.14); color:#7f1d1d;">
+                Out of Stock
+              </span>
+            {% endif %}
+          </div>
+
+          <div class="card__body">
+
+            <div class="card__row">
+              <h3 class="card__title">{{ acc.name }}</h3>
+              <span class="tag">{{ acc.category|default:"Accessory" }}</span>
+            </div>
+
+            <p class="card__desc">
+              {{ acc.description|truncatechars:100 }}
+            </p>
+
+            <div class="card__bottom">
+              <div class="price">
+                <div class="price__value">
+                  €{{ acc.price_per_day }}
+                  <span class="price__unit">/day</span>
+                </div>
+              </div>
+
+              <button class="btn btn--primary">
+                Add
+              </button>
+            </div>
+
+          </div>
+        </article>
+        {% empty %}
+          <p class="muted">No accessories available.</p>
+        {% endfor %}
+
+      </div>
+
+    </main>
+
+  </div>
+</section>
+
+<footer class="footer footer--light">
+  <div class="container footer__bottom">
+    © {% now "Y" %} MotoRent. All rights reserved.
+  </div>
+</footer>
+
+<script src="{% static 'js/rent.js' %}"></script>
+
+{% endblock %}

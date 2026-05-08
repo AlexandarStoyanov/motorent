@@ -1,0 +1,107 @@
+{% extends "admin_panel/base_admin.html" %}
+{% load static %}
+
+{% block title %}Bookings Management{% endblock %}
+{% block page_title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-panel">
+  <h2 class="admin-page-title admin-page-title--small">Bookings Management</h2>
+  <p class="admin-page-subtitle">View and manage all motorcycle bookings</p>
+
+  <form method="get" class="bookings-search">
+    <i class="fas fa-search"></i>
+    <input
+      type="text"
+      name="q"
+      value="{{ search }}"
+      placeholder="Search by bike, customer name or email..."
+    >
+  </form>
+
+  <div class="booking-stats">
+    <div class="booking-stat">
+      <span>Total</span>
+      <strong>{{ total_bookings }}</strong>
+    </div>
+
+    <div class="booking-stat">
+      <span>Pending</span>
+      <strong>{{ pending_bookings }}</strong>
+    </div>
+
+    <div class="booking-stat">
+      <span>Completed</span>
+      <strong>{{ completed_bookings }}</strong>
+    </div>
+
+    <div class="booking-stat">
+      <span>Cancelled</span>
+      <strong>{{ cancelled_bookings }}</strong>
+    </div>
+  </div>
+
+  <div class="bookings-list">
+    {% for booking in bookings %}
+      <div class="booking-card">
+        <div class="booking-info">
+          <h3>
+            {{ booking.motorcycle.brand }} {{ booking.motorcycle.model }}
+
+            {% if booking.end_date < today %}
+              <span class="booking-badge completed">completed</span>
+            {% else %}
+              <span class="booking-badge pending">pending</span>
+            {% endif %}
+          </h3>
+
+          <p><strong>Customer:</strong> {{ booking.full_name }}</p>
+          <p><strong>Email:</strong> {{ booking.email }}</p>
+          <p><strong>Phone:</strong> {{ booking.phone_number }}</p>
+          <p><strong>Dates:</strong> {{ booking.start_date }} to {{ booking.end_date }}</p>
+        </div>
+
+        <div class="booking-actions">
+          <div class="booking-price">
+            €{{ booking.motorcycle.price_per_day }}
+          </div>
+
+          <button type="button"
+                  class="admin-btn admin-btn--ghost admin-btn--sm"
+                  onclick="toggleBookingDetails('{{ booking.id }}')">
+            <i class="fas fa-eye"></i>
+            View Details
+          </button>
+
+          <form method="post"
+                action="{% url 'admin_delete_booking' booking.pk %}"
+                onsubmit="return confirm('Are you sure you want to delete this booking? The motorcycle will become available again.');">
+            {% csrf_token %}
+            <button type="submit" class="admin-btn admin-btn--danger admin-btn--sm">
+              <i class="fas fa-trash"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div id="booking-details-{{ booking.id }}" class="booking-details hidden">
+          <p><strong>Booking ID:</strong> #{{ booking.id }}</p>
+          <p><strong>Customer:</strong> {{ booking.full_name }}</p>
+          <p><strong>Email:</strong> {{ booking.email }}</p>
+          <p><strong>Phone:</strong> {{ booking.phone_number }}</p>
+          <p><strong>Motorcycle:</strong> {{ booking.motorcycle.brand }} {{ booking.motorcycle.model }}</p>
+          <p><strong>Start date:</strong> {{ booking.start_date }}</p>
+          <p><strong>End date:</strong> {{ booking.end_date }}</p>
+          <p><strong>Created at:</strong> {{ booking.created_at }}</p>
+      </div>
+
+    {% empty %}
+      <div class="admin-box">
+        <div class="admin-empty">No bookings found.</div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script src="{% static 'js/admin-bookings.js' %}"></script>
+{% endblock %}

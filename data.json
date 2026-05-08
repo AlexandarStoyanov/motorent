@@ -1,0 +1,348 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$kB8YZk7ZuGfoTt1ObkX9UC$dejjE4r9Qvdzj2NcCjQU0wZN4qM7/Vhq7L7HLH62qDY=",
+    "last_login": "2026-05-08T16:21:13.808Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "Aleksandar",
+    "last_name": "Stoqnov",
+    "email": "admin@example.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-01-20T21:02:06.139Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$c1kEOGqz5UuNZfazNR49o5$SKojeqa6FmeLeCr3cpFYSiZIN8F3XqNw5+5/E0IrtFQ=",
+    "last_login": "2026-05-08T16:22:59.783Z",
+    "is_superuser": false,
+    "username": "Pesho",
+    "first_name": "Pesho",
+    "last_name": "Peshov",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-08T15:45:50.412Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$KehemfRRt8QUgxLHM4ne5Y$hb6eEE8bRGw/mCpTdBHn/PcpDahdBVS55OUPqQmf7G8=",
+    "last_login": "2026-05-08T16:32:59.335Z",
+    "is_superuser": false,
+    "username": "AleksandarStoyanov",
+    "first_name": "AleksandarStoyanov",
+    "last_name": "",
+    "email": "aleksandar.stoqnov@teachers.sun-ray-school.eu",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-05-08T16:32:45.247Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "4e1cl31juvzmstyr3s98jh87prav17yr",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlPWew1t5dHECOFCcV4u4QKQW0b2beSyTY1pq2TkuaUJyFFqffLUN5UNsB3qHdZlnmti5TlrsiD9rldUZ6Xg7376BCr986cHRMIw0aYyBNHLMHCNpGr0swCN45bxSYQoNVkTFTtnpUAdhkq1i8P_GIODY:1wBUkH:kGjP1jZfY13oQ9ADzqa77i5dyhZZkJqaXqFejm-y5CI",
+    "expire_date": "2026-04-25T09:35:17.524Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "9iri9cwgkpkh6jbnweftizkzss6y746b",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe_iGlk28ZeSnjNYu_YuDiBHipMKcXcSKQW0b2beWyRYl5rWTnMai7gILU6_G0J-UttBeUC7TzJPbZlHlLsiD9rlbSr0uh7u30GFXrc6so3sB8egFGPmohkjGaMdc7Y2DD6bDZ7JWlQBtHPEHgm1iqAwoPh8AQVROMw:1viIsD:NdDpppk7uzSnaNeVtrgum51R7E61UOLt8m3h51XBAVg",
+    "expire_date": "2026-02-03T21:02:49.064Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "h1t3gekqomsp6pwu3h12kshdsp7yd26u",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe_iGln-JjYlPWew1t5dHECOFCcV4u4QKQW0b2beSyTY1pq2TkuaUJyFFqffLUN5UNsB3qHdZlnmti5TlrsiD9rldUZ6Xg7376BCr986cHRMIw0aYyBNHLMHCNpGr0swCN45bxSYQoNVkTFTtnpUAdhkq1i8P_GIODY:1wA0ms:mVX0QkHonFfgyTFw_YVcgyXoJ8CJSyV-f4N93jJOc-g",
+    "expire_date": "2026-04-21T07:23:50.313Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ruxfdzovu21b5gztvg04s6b3lgwj5xty",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2hCYQmFcuvcMZMqAVA0kpV0Z765NutDtf-_9lwi0rSVsPS1hZnEWgzj9bhPFR6o74DvVW5Ox1XWZJ7kr8qBdXhun5-Vw_w4K9fKtiUdnBwZ20SvvzAhM0VmVUnQ5g40TIKEhBuUxowZjGFATo3UajRbvD-juN4Q:1wLO8J:dlbk05g_DdO9r4r99ansigpit5Da_TNfySK8joOSAKE",
+    "expire_date": "2026-05-22T16:32:59.338Z"
+  }
+},
+{
+  "model": "accounts.profile",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "Pesho"
+    ],
+    "phone_number": ""
+  }
+},
+{
+  "model": "accounts.profile",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "admin"
+    ],
+    "phone_number": ""
+  }
+},
+{
+  "model": "accounts.profile",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "AleksandarStoyanov"
+    ],
+    "phone_number": "0882760115"
+  }
+},
+{
+  "model": "catalog.motorcycle",
+  "pk": 3,
+  "fields": {
+    "brand": "Yamaha",
+    "model": "TDM",
+    "description": "",
+    "category": "adventure",
+    "price_per_day": "160.00",
+    "engine_cc": 900,
+    "status": "available",
+    "image": "motorcycles/57-575139_ekg-clipart-hearbeat-heartbeat-motorcycle-tattoo.png"
+  }
+},
+{
+  "model": "catalog.accessory",
+  "pk": 1,
+  "fields": {
+    "name": "блабла",
+    "description": "асдад",
+    "category": "gloves",
+    "price_per_day": "60.00",
+    "in_stock": true,
+    "image": "accessories/11230909_674517439351288_8656207480618910751_n.jpg"
+  }
+},
+{
+  "model": "booking.booking",
+  "pk": 2,
+  "fields": {
+    "motorcycle": 3,
+    "full_name": "Aleksandar Stoyqnov",
+    "email": "stoqnovfighter@gmail.com",
+    "phone_number": "0882760115",
+    "start_date": "2027-01-07",
+    "end_date": "2027-07-07",
+    "created_at": "2026-04-10T16:16:18.060Z"
+  }
+},
+{
+  "model": "booking.booking",
+  "pk": 3,
+  "fields": {
+    "motorcycle": 3,
+    "full_name": "Aleksandar Stoyqnov",
+    "email": "stoqnovfighter@gmail.com",
+    "phone_number": "0882760115",
+    "start_date": "2026-05-09",
+    "end_date": "2026-05-22",
+    "created_at": "2026-05-08T16:22:26.150Z"
+  }
+},
+{
+  "model": "booking.booking",
+  "pk": 4,
+  "fields": {
+    "motorcycle": 3,
+    "full_name": "Aleksandar Stoyqnov",
+    "email": "aleksandar.stoqnov@teachers.sun-ray-school.eu",
+    "phone_number": "0882760115",
+    "start_date": "2026-05-21",
+    "end_date": "2026-05-31",
+    "created_at": "2026-05-08T16:33:49.975Z"
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 1,
+  "fields": {
+    "title": "Black Sea Coastal Tour",
+    "description": "Ride along the beautiful Black Sea coast, discovering hidden beaches and charming coastal towns.",
+    "image": "tours/bike-placeholder_UrFuevt.jpg",
+    "days": 5,
+    "km": 800,
+    "max_people": 10,
+    "level": "easy",
+    "price": "899.00",
+    "is_active": true
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 2,
+  "fields": {
+    "title": "Balkan Mountain Adventure",
+    "description": "Explore the stunning mountain roads of the Balkans. Experience breathtaking views, winding roads, and authentic local culture.",
+    "image": "",
+    "days": 7,
+    "km": 1200,
+    "max_people": 8,
+    "level": "mid",
+    "price": "1299.00",
+    "is_active": true
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 3,
+  "fields": {
+    "title": "Thracian Heritage Route",
+    "description": "Journey through ancient Thracian lands, visiting historical sites and experiencing rich cultural heritage.",
+    "image": "tours/bike-placeholder_TBNylOO.jpg",
+    "days": 4,
+    "km": 600,
+    "max_people": 12,
+    "level": "easy",
+    "price": "699.00",
+    "is_active": true
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 4,
+  "fields": {
+    "title": "Rhodope Mountains Explorer",
+    "description": "Discover the mystical Rhodope Mountains with their unique landscape, caves, and authentic villages.",
+    "image": "tours/bike-placeholder_c4P2RT4.jpg",
+    "days": 6,
+    "km": 1000,
+    "max_people": 8,
+    "level": "mid",
+    "price": "1099.00",
+    "is_active": true
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2026-01-20T21:04:30.753Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "catalog",
+      "motorcycle"
+    ],
+    "object_id": "1",
+    "object_repr": "Yamaha TDM (900cc)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2026-01-22T19:10:30.255Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "tours",
+      "tour"
+    ],
+    "object_id": "1",
+    "object_repr": "Black Sea Coastal Tour",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2026-01-22T19:11:20.097Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "tours",
+      "tour"
+    ],
+    "object_id": "2",
+    "object_repr": "Balkan Mountain Adventure",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2026-01-22T20:15:28.423Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "tours",
+      "tour"
+    ],
+    "object_id": "3",
+    "object_repr": "Thracian Heritage Route",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2026-01-22T20:16:49.424Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "tours",
+      "tour"
+    ],
+    "object_id": "4",
+    "object_repr": "Rhodope Mountains Explorer",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2026-01-25T19:55:53.227Z",
+    "user": [
+      "admin"
+    ],
+    "content_type": [
+      "tours",
+      "tour"
+    ],
+    "object_id": "2",
+    "object_repr": "Balkan Mountain Adventure",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+}
+]

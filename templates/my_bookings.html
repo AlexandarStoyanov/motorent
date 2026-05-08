@@ -1,0 +1,47 @@
+{% load static %}
+{% load i18n %}
+
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <title>My Bookings | MotoRent</title>
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+<body>
+
+{% include "base.html" %}
+
+<main class="profile-page">
+  <section class="profile-card">
+    <h1>My Bookings</h1>
+    <p class="profile-subtitle">View your motorcycle bookings</p>
+
+    {% if bookings %}
+      <div class="profile-bookings">
+        {% for booking in bookings %}
+          <div class="profile-booking-card">
+            <h3>{{ booking.motorcycle.brand }} {{ booking.motorcycle.model }}</h3>
+
+            <p><strong>Name:</strong> {{ booking.full_name }}</p>
+            <p><strong>Email:</strong> {{ booking.email }}</p>
+            <p><strong>Phone:</strong> {{ booking.phone_number }}</p>
+            <p><strong>Dates:</strong> {{ booking.start_date }} to {{ booking.end_date }}</p>
+
+            <p class="profile-booking-price">
+              €{{ booking.motorcycle.price_per_day }} / day
+            </p>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="profile-empty">
+        You have no bookings yet.
+      </div>
+    {% endif %}
+  </section>
+</main>
+
+</body>
+</html>

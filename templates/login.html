@@ -1,0 +1,50 @@
+{% load static %}
+{% load i18n %}
+
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <title>{% trans "Вход" %} | MotoRent</title>
+  <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+</head>
+<body>
+
+<div class="auth-page">
+  <div class="auth-card">
+    <a href="{% url 'home' %}" class="auth-brand">MotoRent</a>
+
+    <h1>{% trans "Вход" %}</h1>
+    <p class="auth-subtitle">{% trans "Влез в своя акаунт" %}</p>
+
+    {% if form.errors %}
+      <div class="auth-error">
+        {% trans "Грешно потребителско име или парола." %}
+      </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="auth-field">
+        <label for="id_username">{% trans "Потребител" %}</label>
+        <input type="text" name="username" id="id_username" required>
+      </div>
+
+      <div class="auth-field">
+        <label for="id_password">{% trans "Парола" %}</label>
+        <input type="password" name="password" id="id_password" required>
+      </div>
+
+      <button type="submit" class="auth-btn">{% trans "Вход" %}</button>
+    </form>
+
+    <p class="auth-bottom">
+      {% trans "Нямаш акаунт?" %}
+      <a href="{% url 'register' %}">{% trans "Регистрирай се" %}</a>
+    </p>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+{% load static %}
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <title>Register | MotoRent</title>
+  <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+</head>
+<body>
+
+<div class="auth-page">
+  <div class="auth-card">
+    <a href="{% url 'home' %}" class="auth-brand">MotoRent</a>
+
+    <h1>Регистрация</h1>
+    <p class="auth-subtitle">Създай нов акаунт</p>
+
+    {% if form.errors %}
+      <div class="auth-error">
+        Моля, провери въведените данни.
+      </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="auth-field">
+        <label for="id_username">Потребител</label>
+        {{ form.username }}
+      </div>
+
+      <div class="auth-field">
+        <label for="id_email">Имейл</label>
+        {{ form.email }}
+      </div>
+
+      <div class="auth-field">
+        <label for="id_password1">Парола</label>
+        {{ form.password1 }}
+      </div>
+
+      <div class="auth-field">
+        <label for="id_password2">Повтори паролата</label>
+        {{ form.password2 }}
+      </div>
+
+      <button type="submit" class="auth-btn">Регистрация</button>
+    </form>
+
+    <p class="auth-bottom">
+      Вече имаш акаунт?
+      <a href="{% url 'login' %}">Влез</a>
+    </p>
+  </div>
+</div>
+
+</body>
+</html>

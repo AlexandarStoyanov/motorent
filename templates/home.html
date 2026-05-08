@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "MotoRent | Home" %}{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+  <div class="hero__bg" style="background-image:url('{% static "images/hero.jpg" %}')"></div>
+  <div class="hero__overlay"></div>
+
+  <div class="container hero__content">
+    <h1 class="hero__title">
+      {% trans "Ready to hit the" %} <span class="accent">{% trans "open" %}</span><br>
+      <span class="accent">{% trans "road?" %}</span>
+    </h1>
+
+    <p class="hero__subtitle">
+      {% trans "Discover your perfect ride with MotoRentBulgaria — fast, easy, and hassle-free motorcycle rentals for every adventure." %}
+    </p>
+
+    <div class="hero__actions">
+      <a class="btn btn--primary btn--lg" href="{% url 'rent' %}">{% trans "Book Your Ride" %}</a>
+      <a class="btn btn--secondary btn--lg" href="{% url 'accessories' %}">{% trans "View Accessories" %}</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--light" id="why">
+  <div class="container">
+    <h2 class="section__title">
+      {% trans "Why Choose" %} <span class="accent">{% trans "Us?" %}</span>
+    </h2>
+
+    <p class="section__subtitle">
+      {% trans "Experience hassle-free motorcycle rentals with unmatched service quality" %}
+    </p>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature__icon">⏱</div>
+        <h3 class="feature__title">{% trans "Fast Booking" %}</h3>
+        <p class="feature__text">{% trans "Quick and easy online reservation process. Get on the road in minutes." %}</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature__icon">🛡</div>
+        <h3 class="feature__title">{% trans "Full Insurance" %}</h3>
+        <p class="feature__text">{% trans "Comprehensive coverage included. Ride with complete peace of mind." %}</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature__icon">👍</div>
+        <h3 class="feature__title">{% trans "Quality Bikes" %}</h3>
+        <p class="feature__text">{% trans "Well-maintained motorcycles regularly serviced for your safety." %}</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature__icon">📍</div>
+        <h3 class="feature__title">{% trans "Prime Location" %}</h3>
+        <p class="feature__text">{% trans "Conveniently located in Bulgaria with easy pickup and drop-off." %}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--light" id="services">
+  <div class="container">
+    <h2 class="section__title">
+      {% trans "Our" %} <span class="accent">{% trans "Services" %}</span>
+    </h2>
+
+    <p class="section__subtitle">
+      {% trans "Choose how you want to travel — rent a motorcycle, join a guided tour, or get accessories for your gear." %}
+    </p>
+
+    <div class="services">
+      <!-- RENT -->
+      <article class="service-card">
+        <div class="service-card__icon">🏍</div>
+        <h3 class="service-card__title">{% trans "Rent a Motorcycle" %}</h3>
+        <p class="service-card__text">
+          {% trans "Choose a bike from our fleet and book quickly and easily." %}
+        </p>
+        <div class="service-card__actions">
+          <a class="btn btn--primary" href="{% url 'rent' %}">{% trans "Browse Motorcycles" %}</a>
+        </div>
+      </article>
+
+      <!-- TOURS -->
+      <article class="service-card">
+        <div class="service-card__icon">🌍</div>
+        <h3 class="service-card__title">{% trans "Join a Moto Tour" %}</h3>
+        <p class="service-card__text">
+          {% trans "Guided routes in Bulgaria with packages included and unforgettable views." %}
+        </p>
+        <div class="service-card__actions">
+          <a class="btn btn--primary" href="{% url 'tours' %}">{% trans "See Tours" %}</a>
+        </div>
+      </article>
+
+      <!-- ACCESSORIES -->
+      <article class="service-card">
+        <div class="service-card__icon">🧤</div>
+        <h3 class="service-card__title">{% trans "Moto Accessories" %}</h3>
+        <p class="service-card__text">
+          {% trans "Buy or rent gear — jackets, helmets, gloves, and more." %}
+        </p>
+        <div class="service-card__actions">
+          <a class="btn btn--primary" href="{% url 'accessories' %}">{% trans "Go to Accessories" %}</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="fleet">
+  <div class="container">
+    <h2 class="section__title">
+      {% trans "Our" %} <span class="accent">{% trans "Fleet" %}</span>
+    </h2>
+
+    <p class="section__subtitle">
+      {% trans "Choose from our diverse range of well-maintained motorcycles, perfect for any riding style" %}
+    </p>
+
+    <div class="filters">
+      <div class="filters__header">
+        <div class="filters__title">{% trans "Filters" %}</div>
+        <div class="filters__actions">
+          <button class="linkbtn" onclick="document.getElementById('searchBox').value=''; filterCards();">
+            {% trans "Reset" %}
+          </button>
+        </div>
+      </div>
+
+      <div class="filters__grid">
+        <label class="field">
+          <span class="field__label">{% trans "Search" %}</span>
+          <input id="searchBox" class="input" placeholder="{% trans 'Search...' %}" oninput="filterCards()">
+        </label>
+
+        <label class="field">
+          <span class="field__label">{% trans "Sort By" %}</span>
+          <select id="sortBy" class="select" onchange="sortCards()">
+            <option value="name">{% trans "Name (A-Z)" %}</option>
+            <option value="price_asc">{% trans "Price (Low-High)" %}</option>
+            <option value="price_desc">{% trans "Price (High-Low)" %}</option>
+            <option value="cc_desc">{% trans "Engine CC (High-Low)" %}</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div id="fleetGrid" class="grid">
+      {% for m in motorcycles %}
+      <article class="card" data-name="{{ m.brand }} {{ m.model }}" data-price="{{ m.price_per_day }}" data-cc="{{ m.engine_cc }}">
+        <div class="card__img">
+          <img src="{% static "images/bike-placeholder.jpg" %}" alt="{{ m.brand }} {{ m.model }}">
+          <span class="badge">{{ m.status|title }}</span>
+        </div>
+
+        <div class="card__body">
+          <h3 class="card__title">{{ m.brand }} {{ m.model }}</h3>
+          <p class="card__desc">
+            {{ m.engine_cc }}cc • {% trans "Well-maintained and ready to ride" %}
+          </p>
+
+          <div class="card__bottom">
+            <div class="price">
+              <div class="price__label">{% trans "From" %}</div>
+              <div class="price__value">
+                €{{ m.price_per_day }}<span class="price__unit">/{% trans "day" %}</span>
+              </div>
+            </div>
+
+            <a class="btn btn--primary" href="/api/motorcycles/{{ m.id }}/">{% trans "Book Now" %}</a>
+          </div>
+        </div>
+      </article>
+      {% empty %}
+      <p style="opacity:.8">
+        {% trans "No motorcycles added yet." %}
+        {% trans "Add from" %} <a href="/admin/">{% trans "Admin" %}</a>.
+      </p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="tours">
+  <div class="container cta__box">
+    <h2 class="cta__title">{% trans "Start Your Adventure Today" %}</h2>
+    <p class="cta__text">
+      {% trans "Join hundreds of satisfied riders who have explored Bulgaria on two wheels." %}
+      {% trans "Book your motorcycle now and experience the freedom of the open road." %}
+    </p>
+    <div class="cta__actions">
+      <a class="btn btn--primary btn--lg" href="#fleet">{% trans "Book Your Motorcycle" %}</a>
+      <a class="btn btn--ghost btn--lg" href="tel:+359123456789">{% trans "Call Us" %}</a>
+      <a class="btn btn--ghost btn--lg" href="mailto:info@motorentbulgaria.com">{% trans "Email" %}</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" id="accessories">
+  <div class="container footer__grid">
+    <div>
+      <div class="footer__brand">MotoRentBulgaria</div>
+      <p class="footer__text">{% trans "Your trusted partner for motorcycle adventures across Bulgaria." %}</p>
+      <div class="footer__icons">
+        <span class="soc">f</span>
+        <span class="soc">ig</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer__heading">{% trans "Quick Links" %}</div>
+      <a class="footer__link" href="#fleet">{% trans "Our Fleet" %}</a>
+      <a class="footer__link" href="#why">{% trans "About Us" %}</a>
+      <a class="footer__link" href="#tours">{% trans "Tours" %}</a>
+      <a class="footer__link" href="/admin/">{% trans "Admin" %}</a>
+    </div>
+
+    <div>
+      <div class="footer__heading">{% trans "Contact Us" %}</div>
+      <div class="footer__row">📍 {% trans "Sofia, Bulgaria" %}</div>
+      <div class="footer__row">📞 +359 123 456 789</div>
+      <div class="footer__row">✉ info@motorentbulgaria.com</div>
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    © 2026 MotoRentBulgaria. {% trans "All rights reserved." %}
+  </div>
+</footer>
+
+<script>
+function filterCards() {
+  const q = (document.getElementById('searchBox').value || '').toLowerCase();
+  document.querySelectorAll('#fleetGrid .card').forEach(card => {
+    const name = (card.getAttribute('data-name') || '').toLowerCase();
+    card.style.display = name.includes(q) ? '' : 'none';
+  });
+}
+
+function sortCards() {
+  const grid = document.getElementById('fleetGrid');
+  const cards = Array.from(grid.querySelectorAll('.card'));
+  const mode = document.getElementById('sortBy').value;
+
+  const key = (c) => ({
+    name: (c.getAttribute('data-name') || '').toLowerCase(),
+    price: parseFloat(c.getAttribute('data-price') || '0'),
+    cc: parseInt(c.getAttribute('data-cc') || '0', 10),
+  });
+
+  cards.sort((a,b) => {
+    const A = key(a), B = key(b);
+    if (mode === 'name') return A.name.localeCompare(B.name);
+    if (mode === 'price_asc') return A.price - B.price;
+    if (mode === 'price_desc') return B.price - A.price;
+    if (mode === 'cc_desc') return B.cc - A.cc;
+    return 0;
+  });
+
+  cards.forEach(c => grid.appendChild(c));
+}
+</script>
+
+{% endblock %}

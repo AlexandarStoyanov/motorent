@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Турове{% endblock %}
+
+{% block content %}
+<section class="rent-hero">
+  <div class="container rent-hero__inner">
+    <h1 class="rent-hero__title">Мотоциклетни турове и пътувания</h1>
+    <p class="rent-hero__subtitle">
+      Присъединете се към нашите водени мотоциклетни турове и разгледайте най-красивите маршрути.
+      Всичко включено пакети с експертни гидове, настаняване и незабравими преживявания.
+    </p>
+  </div>
+</section>
+
+<section class="rent">
+  <div class="container">
+    <div class="grid grid--rent">
+      {% for t in tours %}
+      <article class="card card--rent">
+        <div class="card__img card__img--rent">
+          {% if t.image %}
+            <img src="{{ t.image.url }}" alt="{{ t.title }}">
+          {% else %}
+            <img src="{% static 'img/bike-placeholder.jpg' %}" alt="{{ t.title }}">
+          {% endif %}
+        </div>
+
+        <div class="card__body">
+          <div class="card__row">
+            <h3 class="card__title">{{ t.title }}</h3>
+            <span class="tag">
+              {% if t.level == "easy" %}Лесен{% elif t.level == "mid" %}Среден{% else %}Труден{% endif %}
+            </span>
+          </div>
+
+          <p class="card__desc">{{ t.description }}</p>
+
+          <div class="card__bottom">
+            <div>
+              <div class="price__label">Цена на човек</div>
+              <div class="price__value">€{{ t.price }}<span class="price__unit">/tour</span></div>
+            </div>
+              <a href="#" role="button"
+               class="btn btn--primary"
+               data-open-tour
+               data-tour-id="{{ t.id }}"
+               data-tour-title="{{ t.title|escape }}"
+               data-tour-price="{{ t.price }}">
+              Резервирай тук
+            </a>
+          </div>
+        </div>
+      </article>
+      {% empty %}
+      <p>Няма добавени турове.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ===== MODAL ===== -->
+<div id="tourModalBackdrop" class="modal-backdrop hidden" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tourModalTitle">
+    <div class="modal__head">
+      <h3 id="tourModalTitle" class="modal__title">Резервирай</h3>
+      <button class="modal__close" type="button" data-close-modal>✕</button>
+    </div>
+
+    <div class="modal__body">
+      <form id="tourInquiryForm">
+        {% csrf_token %}
+        <input type="hidden" id="tour_id" name="tour_id">
+        <input type="hidden" id="tour_price" name="tour_price">
+
+        <div class="form-grid">
+          <div>
+            <label class="field__label">Пълно име *</label>
+            <input class="input" id="full_name" name="full_name" required>
+          </div>
+          <div>
+            <label class="field__label">Имейл *</label>
+            <input class="input" id="email" name="email" type="email" required>
+          </div>
+
+          <div>
+            <label class="field__label">Телефон *</label>
+            <input class="input" id="phone" name="phone" required>
+          </div>
+          <div>
+            <label class="field__label">Брой участници *</label>
+            <input class="input" id="people" name="people" type="number" min="1" value="1" required>
+          </div>
+
+          <div class="field--wide">
+            <label class="field__label">Изберете мотоциклет *</label>
+            <select class="select" id="motorcycle_id" name="motorcycle_id" required>
+              <option value="">Изберете мотоциклет</option>
+                {% for m in motorcycles %}
+                  <option value="{{ m.id }}">
+                    {{ m.brand }} {{ m.model }}
+                  </option>
+                {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="modal__section">
+          <h4 class="modal__sectionTitle">Добави аксесоари (по избор)</h4>
+          <div id="accList" class="acc-list">
+            <!-- JS will render accessories -->
+          </div>
+        </div>
+
+        <div class="modal__section">
+          <label class="field__label">Допълнителна информация</label>
+          <textarea class="input" id="notes" name="notes" rows="3"
+            placeholder="Разкажете ни за вашето ниво на опит, предпочитания или въпроси..."></textarea>
+        </div>
+
+        <div class="modal__section" style="border:1px solid var(--border);border-radius:14px;padding:14px;background:#f8fafc">
+          <div style="display:flex;justify-content:space-between;gap:10px;margin-bottom:8px">
+            <div style="color:var(--muted);font-weight:700">Цена на тур на човек:</div>
+            <div id="pricePerPerson" style="font-weight:900">€0</div>
+          </div>
+          <div style="display:flex;justify-content:space-between;gap:10px">
+            <div style="color:var(--muted);font-weight:700">Общо (<span id="peopleCount">1</span> човек):</div>
+            <div id="totalPrice" style="font-weight:900;color:var(--orange)">€0</div>
+          </div>
+        </div>
+
+        <div id="formMsg" class="form-msg hidden"></div>
+
+        <button class="btn btn--primary btn--full btn--xl" type="submit">
+          Изпрати запитване
+        </button>
+
+        <p style="text-align:center;color:var(--muted);margin:10px 0 0;font-size:13px">
+          Ще се свържем с вас в рамките на 24 часа, за да потвърдим наличността и да финализираме резервацията ви.
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/tours.js' %}"></script>
+{% endblock %}
