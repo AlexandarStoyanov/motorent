@@ -59,6 +59,11 @@ urlpatterns = [
     path("dashboard/admin/reviews/", admin_views.admin_reviews, name="admin_reviews"),
     path("dashboard/admin/reviews/add/", admin_views.admin_add_review, name="admin_add_review"),
     path("dashboard/admin/reviews/<int:pk>/delete/", admin_views.admin_delete_review, name="admin_delete_review"),
+
+    path("dashboard/admin/tours/", admin_views.admin_tours, name="admin_tours"),
+    path("dashboard/admin/tours/add/", admin_views.admin_add_tour, name="admin_add_tour"),
+    path("dashboard/admin/tours/<int:pk>/edit/", admin_views.admin_edit_tour, name="admin_edit_tour"),
+    path("dashboard/admin/tours/<int:pk>/delete/", admin_views.admin_delete_tour, name="admin_delete_tour"),
 ]
 
 urlpatterns += i18n_patterns(

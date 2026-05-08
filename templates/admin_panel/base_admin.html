@@ -41,6 +41,12 @@
               <span>Accessories</span>
           </a>
 
+            <a href="{% url 'admin_tours' %}"
+               class="admin-link {% if request.resolver_match.url_name == 'admin_tours' %}active{% endif %}">
+              <i class="fas fa-route"></i>
+              Tours
+            </a>
+
           <a href="{% url 'admin_bookings' %}"
                class="admin-link {% if request.resolver_match.url_name == 'admin_bookings' %}active{% endif %}">
               <i class="fas fa-calendar-alt"></i>

@@ -10,6 +10,7 @@ from django.db.models.functions import Coalesce
 from django.shortcuts import render, redirect, get_object_or_404
 
 from booking.models import Booking
+from tours.models import Tour
 from .models import Motorcycle, Accessory, DiscountCode, Review
 
 
@@ -394,3 +395,64 @@ def admin_delete_review(request, pk):
     review.delete()
     messages.success(request, "Review deleted successfully.")
     return redirect("admin_reviews")
+
+@login_required
+@user_passes_test(is_admin_user)
+def admin_tours(request):
+    tours = Tour.objects.all().order_by("-id")
+    return render(request, "admin_panel/tours.html", {
+        "tours": tours,
+    })
+
+
+@login_required
+@user_passes_test(is_admin_user)
+def admin_add_tour(request):
+    if request.method == "POST":
+        Tour.objects.create(
+            title=request.POST.get("title", "").strip(),
+            description=request.POST.get("description", "").strip(),
+            days=request.POST.get("days") or 1,
+            km=request.POST.get("km") or 0,
+            max_people=request.POST.get("max_people") or 1,
+            level=request.POST.get("level", "mid"),
+            price=request.POST.get("price") or 0,
+            is_active=bool(request.POST.get("is_active")),
+            image=request.FILES.get("image"),
+        )
+        messages.success(request, "Tour added successfully.")
+
+    return redirect("admin_tours")
+
+
+@login_required
+@user_passes_test(is_admin_user)
+def admin_edit_tour(request, pk):
+    tour = get_object_or_404(Tour, pk=pk)
+
+    if request.method == "POST":
+        tour.title = request.POST.get("title", "").strip()
+        tour.description = request.POST.get("description", "").strip()
+        tour.days = request.POST.get("days") or 1
+        tour.km = request.POST.get("km") or 0
+        tour.max_people = request.POST.get("max_people") or 1
+        tour.level = request.POST.get("level", "mid")
+        tour.price = request.POST.get("price") or 0
+        tour.is_active = bool(request.POST.get("is_active"))
+
+        if request.FILES.get("image"):
+            tour.image = request.FILES.get("image")
+
+        tour.save()
+        messages.success(request, "Tour updated successfully.")
+
+    return redirect("admin_tours")
+
+
+@login_required
+@user_passes_test(is_admin_user)
+def admin_delete_tour(request, pk):
+    tour = get_object_or_404(Tour, pk=pk)
+    tour.delete()
+    messages.success(request, "Tour deleted successfully.")
+    return redirect("admin_tours")

@@ -156,10 +156,15 @@
     <div id="fleetGrid" class="grid">
       {% for m in motorcycles %}
       <article class="card" data-name="{{ m.brand }} {{ m.model }}" data-price="{{ m.price_per_day }}" data-cc="{{ m.engine_cc }}">
-        <div class="card__img">
-          <img src="{% static "images/bike-placeholder.jpg" %}" alt="{{ m.brand }} {{ m.model }}">
-          <span class="badge">{{ m.status|title }}</span>
-        </div>
+          <div class="card__img">
+              {% if m.image %}
+                <img src="{{ m.image.url }}" alt="{{ m.brand }} {{ m.model }}">
+              {% else %}
+                <img src="{% static 'images/bike-placeholder.jpg' %}" alt="{{ m.brand }} {{ m.model }}">
+              {% endif %}
+
+              <span class="badge">{{ m.status|title }}</span>
+          </div>
 
         <div class="card__body">
           <h3 class="card__title">{{ m.brand }} {{ m.model }}</h3>
