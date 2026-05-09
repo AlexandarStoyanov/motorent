@@ -17,16 +17,20 @@ class TourViewSet(ReadOnlyModelViewSet):
     queryset = Tour.objects.filter(is_active=True).order_by("-id")
     serializer_class = TourSerializer
 
-def safe_send_tour_email(subject, body, admin_email):
+def safe_send_tour_email(subject, body, recipient_email):
     try:
-        send_mail(
-            subject,
-            body,
-            settings.DEFAULT_FROM_EMAIL,
-            [admin_email],
-            fail_silently=True,
-            timeout=5,
+        connection = get_connection(timeout=5)
+
+        email = EmailMessage(
+            subject=subject,
+            body=body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[recipient_email],
+            connection=connection,
         )
+
+        email.send(fail_silently=True)
+
     except Exception as e:
         print("EMAIL ERROR:", e)
 
