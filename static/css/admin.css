@@ -898,49 +898,63 @@ html, body{
     align-items:flex-start;
   }
 }
+/* ===== ADMIN POPUP MODAL ===== */
 
-.admin-modal.hidden {
-  display: none;
+.admin-modal.hidden{
+  display:none !important;
 }
 
-.admin-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
+.admin-modal{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:block;
 }
 
-.admin-modal__backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.55);
+.admin-modal__backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(15,23,42,.65);
 }
 
-.admin-modal__content {
-  position: relative;
-  max-width: 760px;
-  max-height: 90vh;
-  overflow-y: auto;
-  margin: 5vh auto;
-  background: #fff;
-  border-radius: 18px;
-  padding: 24px;
-  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.35);
+.admin-modal__content{
+  position:relative;
+  z-index:2;
+  width:min(760px, 92%);
+  max-height:88vh;
+  overflow-y:auto;
+  margin:50px auto;
+  background:#fff;
+  border-radius:22px;
+  padding:28px;
+  box-shadow:0 30px 80px rgba(0,0,0,.35);
 }
 
-.admin-modal__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
+.admin-modal__title{
+  margin:0 0 20px;
+  font-size:24px;
+  font-weight:900;
+  color:var(--admin-text);
 }
 
-.admin-modal__header h3 {
-  margin: 0;
-  font-size: 24px;
+.admin-modal__close{
+  position:absolute;
+  top:16px;
+  right:18px;
+  border:0;
+  background:transparent;
+  font-size:32px;
+  line-height:1;
+  cursor:pointer;
+  color:var(--admin-muted);
 }
 
-.admin-modal-open {
-  overflow: hidden;
+.admin-modal__close:hover{
+  color:var(--admin-danger);
+}
+
+.admin-modal-open{
+  overflow:hidden;
 }
 /* RESPONSIVE */
 @media (max-width:900px){
