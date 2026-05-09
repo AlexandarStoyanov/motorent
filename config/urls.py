@@ -6,6 +6,8 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib.auth import views as auth_views
 from rest_framework.routers import DefaultRouter
 from accounts.views import register, profile, my_bookings
+from booking import views as booking_views
+
 
 from config.views import home
 from catalog.views import rent, accessories
@@ -27,9 +29,10 @@ urlpatterns = [
     path("register/", register, name="register"),
     path("profile/", profile, name="profile"),
     path("my-bookings/", my_bookings, name="my_bookings"),
-
-    path("api/", include(router.urls)),
     path("api/tours/inquiry/", send_tour_inquiry, name="send_tour_inquiry"),
+    path("api/", include(router.urls)),
+    path("payment-success/", booking_views.booking_payment_success, name="booking_payment_success"),
+    path("payment-cancel/", booking_views.booking_payment_cancel, name="booking_payment_cancel"),
 
     path("login/",auth_views.LoginView.as_view(template_name="login.html"),name="login",),
     path("logout/",auth_views.LogoutView.as_view(next_page="/"),name="logout",),

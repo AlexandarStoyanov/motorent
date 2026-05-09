@@ -113,6 +113,9 @@ async function submitBooking(e){
   e.preventDefault();
   hideMsg();
 
+  const paymentMethod =
+    document.querySelector('input[name="payment_method"]:checked')?.value || "onsite";
+
   const payload = {
     motorcycle: +document.getElementById('motorcycleId').value,
     full_name: document.getElementById('fullName').value.trim(),
@@ -120,14 +123,17 @@ async function submitBooking(e){
     phone_number: document.getElementById('phone').value.trim(),
     start_date: document.getElementById('startDate').value,
     end_date: document.getElementById('endDate').value,
+    payment_method: paymentMethod
   };
 
   if(!payload.full_name || !payload.email){
     return showMsg("Name and email are required");
   }
+
   if(!payload.start_date || !payload.end_date){
     return showMsg("Start and End date are required");
   }
+
   if(payload.end_date < payload.start_date){
     return showMsg("End date must be after start date");
   }
@@ -139,20 +145,37 @@ async function submitBooking(e){
   try{
     const res = await fetch("/api/bookings/", {
       method: "POST",
-      headers: {"Content-Type": "application/json",
-      "X-CSRFToken": getCSRFToken()},
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCSRFToken()
+      },
       body: JSON.stringify(payload)
     });
 
     const data = await res.json().catch(()=> ({}));
 
     if(!res.ok){
-      const key = data && typeof data === "object" ? Object.keys(data)[0] : null;
-      if(key) return showMsg(`${key}: ${Array.isArray(data[key]) ? data[key][0] : data[key]}`);
+      const key = data && typeof data === "object"
+        ? Object.keys(data)[0]
+        : null;
+
+      if(key){
+        return showMsg(
+          `${key}: ${Array.isArray(data[key]) ? data[key][0] : data[key]}`
+        );
+      }
+
       return showMsg("Booking failed");
     }
 
+    // STRIPE REDIRECT
+    if(data.checkout_url){
+      window.location.href = data.checkout_url;
+      return;
+    }
+
     showMsg("Booking created successfully ✅", true);
+
     setTimeout(closeBookingModal, 900);
 
   }catch{
@@ -162,7 +185,6 @@ async function submitBooking(e){
     btn.style.opacity = "1";
   }
 }
-
 document.addEventListener("DOMContentLoaded", ()=>{
   // Backdrop click closes ONLY if you click outside modal
   const backdrop = document.getElementById("modalBackdrop");

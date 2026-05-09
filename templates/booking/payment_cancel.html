@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Cancelled{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 90px 20px; text-align: center;">
+  <h1>Payment cancelled</h1>
+  <p>Your payment was cancelled. Your booking is not paid yet.</p>
+
+  <a href="{% url 'rent' %}" class="btn btn--primary">
+    Back to rentals
+  </a>
+</div>
+{% endblock %}

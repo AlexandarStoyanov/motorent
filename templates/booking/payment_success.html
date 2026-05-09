@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Successful{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 90px 20px; text-align: center;">
+  <h1>Payment successful</h1>
+  <p>Your booking has been paid successfully.</p>
+
+  <a href="{% url 'my_bookings' %}" class="btn btn--primary">
+    My Bookings
+  </a>
+</div>
+{% endblock %}

@@ -20,7 +20,6 @@
 <section class="rent">
   <div class="container rent__layout">
 
-    <!-- Filters (left) -->
     <aside class="rent__filters">
       <div class="filters filters--side">
         <div class="filters__header">
@@ -72,7 +71,6 @@
       </div>
     </aside>
 
-    <!-- List (right) -->
     <main class="rent__content">
       <div class="rent__toprow">
         <div class="muted">
@@ -82,12 +80,13 @@
 
       <div id="grid" class="grid grid--rent">
         {% for m in motorcycles %}
-        <article class="card card--rent"
-                 data-name="{{ m.brand }} {{ m.model }}"
-                 data-price="{{ m.price_per_day }}"
-                 data-cc="{{ m.engine_cc }}"
-                 data-status="{{ m.status }}"
-                 data-category="">
+          <article class="card card--rent"
+                   data-name="{{ m.brand }} {{ m.model }}"
+                   data-price="{{ m.price_per_day }}"
+                   data-cc="{{ m.engine_cc }}"
+                   data-status="{{ m.status }}"
+                   data-category="{{ m.category|default:'' }}">
+
             <div class="card__img card__img--rent">
               {% if m.image %}
                 <img src="{{ m.image.url }}" alt="{{ m.brand }} {{ m.model }}">
@@ -98,28 +97,30 @@
               <span class="pillbadge">{{ m.status|title }}</span>
             </div>
 
-          <div class="card__body">
-            <div class="card__row">
-              <h3 class="card__title">{{ m.brand }} {{ m.model }}</h3>
-              <span class="tag">Sport</span>
-            </div>
-
-            <p class="card__desc">
-              {{ m.engine_cc }}cc • Smooth ride, premium condition and ready for booking.
-            </p>
-
-            <div class="card__bottom">
-              <div class="price">
-                <div class="price__value">€{{ m.price_per_day }}<span class="price__unit">/day</span></div>
+            <div class="card__body">
+              <div class="card__row">
+                <h3 class="card__title">{{ m.brand }} {{ m.model }}</h3>
+                <span class="tag">{{ m.category|default:"Sport"|title }}</span>
               </div>
 
-              <button class="btn btn--primary" type="button"
-                      onclick="openBookingModal({{ m.id }}, '{{ m.brand|escapejs }} {{ m.model|escapejs }}', '{{ m.price_per_day }}')">
-                Book Now
-              </button>
+              <p class="card__desc">
+                {{ m.engine_cc }}cc • Smooth ride, premium condition and ready for booking.
+              </p>
+
+              <div class="card__bottom">
+                <div class="price">
+                  <div class="price__value">
+                    €{{ m.price_per_day }}<span class="price__unit">/day</span>
+                  </div>
+                </div>
+
+                <button class="btn btn--primary" type="button"
+                        onclick="openBookingModal({{ m.id }}, '{{ m.brand|escapejs }} {{ m.model|escapejs }}', '{{ m.price_per_day }}')">
+                  Book Now
+                </button>
+              </div>
             </div>
-          </div>
-        </article>
+          </article>
         {% empty %}
           <p class="muted">Няма мотори. Добави от <a href="/admin/">Admin</a>.</p>
         {% endfor %}
@@ -128,7 +129,6 @@
 
   </div>
 
-  <!-- MODAL (hidden by default) -->
   <div id="modalBackdrop" class="modal-backdrop hidden">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
 
@@ -139,7 +139,8 @@
 
       <div class="modal__body">
         <form id="bookingForm" method="POST">
-            {% csrf_token %}
+          {% csrf_token %}
+
           <input type="hidden" id="motorcycleId">
 
           <div class="form-grid">
@@ -175,7 +176,6 @@
             <div class="acc-list">
               {% for acc in accessories %}
                 <div class="acc-item">
-
                   <div>
                     <div class="acc-name">
                       {{ acc.name }}
@@ -192,12 +192,26 @@
                           onclick="toggleAcc(this)">
                     +
                   </button>
-
                 </div>
               {% empty %}
                 <p class="muted">No accessories available</p>
               {% endfor %}
             </div>
+          </div>
+
+          <div class="modal__section">
+            <h3 class="modal__sectionTitle">Payment Method</h3>
+
+            <label class="payment-option">
+              <input type="radio" name="payment_method" value="onsite" checked>
+              Pay on site
+            </label>
+
+            <label class="payment-option">
+              <input type="radio" name="payment_method" value="online">
+              Pay online with card
+            </label>
+          </div>
 
           <div id="formMsg" class="form-msg hidden"></div>
 
@@ -211,6 +225,7 @@
   </div>
 
 </section>
+
 <footer class="footer footer--light">
   <div class="container footer__grid">
     <div>

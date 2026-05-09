@@ -35,7 +35,6 @@
     msg.classList.remove("form-msg--ok");
   }
 
-  // ✅ MOTORCYCLES
   async function loadMotorcycles() {
     try {
       const res = await fetch("/api/motorcycles/");
@@ -58,7 +57,6 @@
     }
   }
 
-  // ✅ ACCESSORIES (FIXED)
   async function loadAccessories() {
     accList.innerHTML = `<div class="muted">Зареждане...</div>`;
 
@@ -91,7 +89,7 @@
               type="checkbox"
               value="${acc.id}"
               data-price="${acc.price_per_day}"
-              onchange="recalc()"
+              onchange="window.recalcTourPrice && window.recalcTourPrice()"
             />
           </label>
         `);
@@ -118,13 +116,10 @@
     return total;
   }
 
-  // ✅ PRICE CALC (UPDATED)
   function recalc() {
     const people = parseInt(peopleEl.value || "1", 10);
     const basePrice = parseFloat(tourPriceEl.value || "0");
-
     const accPrice = accessoriesTotal();
-
     const total = (basePrice + accPrice) * people;
 
     peopleCount.textContent = people;
@@ -132,7 +127,8 @@
     totalPrice.textContent = `€${total.toFixed(0)}`;
   }
 
-  // OPEN MODAL
+  window.recalcTourPrice = recalc;
+
   document.addEventListener("click", async (e) => {
     const btn = e.target.closest("[data-open-tour]");
     if (!btn) return;
@@ -148,7 +144,6 @@
     openModal();
   });
 
-  // CLOSE
   closeBtns.forEach(b => b.addEventListener("click", closeModal));
 
   backdrop.addEventListener("click", (e) => {
@@ -161,12 +156,15 @@
 
   peopleEl.addEventListener("input", recalc);
 
-  // SUBMIT
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     msg.classList.add("hidden");
+    msg.classList.remove("form-msg--ok");
     msg.textContent = "";
+
+    const paymentMethod =
+      document.querySelector('input[name="tour_payment_method"]:checked')?.value || "onsite";
 
     const payload = {
       tour_id: tourIdEl.value,
@@ -177,6 +175,7 @@
       motorcycle_id: motoSelect.value,
       accessories: selectedAccessories(),
       notes: document.getElementById("notes").value,
+      payment_method: paymentMethod,
     };
 
     const csrf = getCookie("csrftoken");
@@ -193,7 +192,14 @@
 
       const data = await res.json();
 
-      if (!res.ok) throw new Error(data.error || "Failed");
+      if (!res.ok) {
+        throw new Error(data.error || "Failed");
+      }
+
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+        return;
+      }
 
       msg.textContent = "✅ Успешно изпратено!";
       msg.classList.remove("hidden");
@@ -210,5 +216,4 @@
       msg.classList.remove("hidden");
     }
   });
-
 })();
