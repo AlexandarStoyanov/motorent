@@ -898,6 +898,50 @@ html, body{
     align-items:flex-start;
   }
 }
+
+.admin-modal.hidden {
+  display: none;
+}
+
+.admin-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+
+.admin-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.admin-modal__content {
+  position: relative;
+  max-width: 760px;
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: 5vh auto;
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.35);
+}
+
+.admin-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.admin-modal__header h3 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.admin-modal-open {
+  overflow: hidden;
+}
 /* RESPONSIVE */
 @media (max-width:900px){
   .admin-layout{
