@@ -2,7 +2,8 @@ import json
 import stripe
 
 from django.conf import settings
-from django.core.mail import get_connection, EmailMessagefrom django.http import JsonResponse
+from django.core.mail import get_connection, EmailMessage
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
 from rest_framework.viewsets import ReadOnlyModelViewSet
