@@ -3,7 +3,6 @@ import stripe
 import requests
 
 from django.conf import settings
-from django.core.mail import get_connection, EmailMessage
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
@@ -17,6 +16,7 @@ from catalog.models import Motorcycle
 class TourViewSet(ReadOnlyModelViewSet):
     queryset = Tour.objects.filter(is_active=True).order_by("-id")
     serializer_class = TourSerializer
+
 
 def safe_send_tour_email(subject, body, recipient_email):
     try:
@@ -57,6 +57,7 @@ def safe_send_tour_email(subject, body, recipient_email):
 
     except Exception as e:
         print("EMAIL ERROR:", e)
+
 
 @require_POST
 @csrf_protect
@@ -113,12 +114,6 @@ def send_tour_inquiry(request):
         payment_method=payment_method,
         payment_status="pending" if payment_method == "online" else "onsite",
         total_price=total_price,
-    )
-
-    admin_email = (
-        getattr(settings, "TOURS_ADMIN_EMAIL", None)
-        or getattr(settings, "ADMIN_EMAIL", None)
-        or settings.DEFAULT_FROM_EMAIL
     )
 
     subject = f"Ново записване за тур: {tour.title}"
@@ -188,7 +183,7 @@ def send_tour_inquiry(request):
         tour_booking.save()
 
         body += f"\nSTRIPE SESSION: {session.id}\n"
-        safe_send_tour_email(subject, body, admin_email)
+        safe_send_tour_email(subject, body, email)
 
         return JsonResponse({
             "ok": True,
@@ -196,7 +191,7 @@ def send_tour_inquiry(request):
             "checkout_url": session.url,
         })
 
-    safe_send_tour_email(subject, body, admin_email)
+    safe_send_tour_email(subject, body, email)
 
     return JsonResponse({
         "ok": True,
