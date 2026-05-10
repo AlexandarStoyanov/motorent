@@ -1,4 +1,3 @@
-import int
 import builtins
 from pathlib import Path
 from decouple import config
