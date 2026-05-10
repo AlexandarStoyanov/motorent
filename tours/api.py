@@ -19,21 +19,43 @@ class TourViewSet(ReadOnlyModelViewSet):
 
 def safe_send_tour_email(subject, body, recipient_email):
     try:
-        connection = get_connection(timeout=5)
+        api_key = getattr(settings, "BREVO_API_KEY", "")
 
-        email = EmailMessage(
-            subject=subject,
-            body=body,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[recipient_email],
-            connection=connection,
-        )
+        if not api_key:
+            print("EMAIL ERROR: Missing BREVO_API_KEY")
+            return
 
-        email.send(fail_silently=True)
+        url = "https://api.brevo.com/v3/smtp/email"
+
+        payload = {
+            "sender": {
+                "name": "MotoRent",
+                "email": settings.DEFAULT_FROM_EMAIL,
+            },
+            "to": [
+                {
+                    "email": recipient_email,
+                }
+            ],
+            "subject": subject,
+            "textContent": body,
+        }
+
+        headers = {
+            "accept": "application/json",
+            "api-key": api_key,
+            "content-type": "application/json",
+        }
+
+        response = requests.post(url, json=payload, headers=headers, timeout=10)
+
+        if response.status_code not in [200, 201, 202]:
+            print("EMAIL ERROR:", response.status_code, response.text)
+        else:
+            print("EMAIL SENT OK:", response.status_code)
 
     except Exception as e:
         print("EMAIL ERROR:", e)
-
 
 @require_POST
 @csrf_protect
